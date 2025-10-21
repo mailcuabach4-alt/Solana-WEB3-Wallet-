@@ -4,12 +4,7 @@ import bs58 from 'bs58';
 import { ConnectWallet } from './components/ConnectWallet';
 import { WalletDashboard } from './components/WalletDashboard';
 import { NetworkSwitcher } from './components/NetworkSwitcher';
-
-// IMPORTANT: To use this app, you need to install dependencies:
-// npm install react react-dom @solana/web3.js bs58
-// You also need a browser bundler like Vite or Create React App that handles polyfills.
-// For example, you might need to install 'buffer' and configure it in your build tool.
-// For Vite: npm install buffer; add `global: 'globalThis'` to `define` in vite.config.js
+import { Guide } from './components/Guide';
 
 const App: React.FC = () => {
     const [keypair, setKeypair] = useState<Keypair | null>(null);
@@ -18,6 +13,7 @@ const App: React.FC = () => {
     const [customRpcUrl, setCustomRpcUrl] = useState<string>('http://127.0.0.1:8899');
     const [error, setError] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
+    const [isGuideOpen, setIsGuideOpen] = useState(false);
 
     const connection = useMemo(() => {
         const endpoint = network === 'custom' ? customRpcUrl : clusterApiUrl(network);
@@ -135,9 +131,18 @@ const App: React.FC = () => {
         <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center justify-center p-4 font-mono">
             <div className="w-full max-w-2xl bg-gray-800 rounded-2xl shadow-lg p-6 md:p-8 space-y-6 border border-purple-500/30">
                 <div className="text-center">
-                    <h1 className="text-3xl font-bold text-purple-400">Ví Solana</h1>
+                     <div className="flex items-center justify-center gap-3">
+                        <h1 className="text-3xl font-bold text-purple-400">Ví Solana</h1>
+                        <button onClick={() => setIsGuideOpen(!isGuideOpen)} className="text-gray-400 hover:text-purple-400 transition-colors" aria-label="Toggle Guide">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </button>
+                    </div>
                     <p className="text-gray-400 mt-1">Một ví đơn giản cho mạng Local & Devnet</p>
                 </div>
+                
+                <Guide isOpen={isGuideOpen} />
 
                 <NetworkSwitcher 
                   network={network}
