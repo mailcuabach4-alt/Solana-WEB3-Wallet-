@@ -4,7 +4,7 @@ Chào mừng bạn đến với Ví Solana Đơn Giản! Đây là một ứng d
 
 **Quan trọng:** Ứng dụng này được tạo ra cho **mục đích học tập và phát triển**. Vui lòng đọc kỹ phần **Cảnh Báo Bảo Mật** trước khi sử dụng.
 
-![Giao diện Ví Solana](https://prnt.sc/NyaY7xzZOSmO)
+![Giao diện Ví Solana](https://ibb.co/mVQPdnFn)
 
 ## 🌟 Tính Năng Chính
 
