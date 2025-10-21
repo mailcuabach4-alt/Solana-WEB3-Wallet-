@@ -1,0 +1,5 @@
+{
+  "name": "Ví Solana Local",
+  "description": "Một ứng dụng ví Web3 đơn giản để kết nối với mạng cục bộ Solana bằng khóa riêng tư, xem số dư và chuyển SOL. Được tạo cho mục đích phát triển và thử nghiệm.",
+  "requestFramePermissions": []
+}
