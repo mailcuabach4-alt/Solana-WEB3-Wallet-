@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction, sendAndConfirmTransaction, clusterApiUrl, Cluster } from '@solana/web3.js';
 import bs58 from 'bs58';
@@ -46,13 +45,29 @@ const App: React.FC = () => {
         }
     }, [keypair, fetchBalance]);
 
-    const handleConnect = useCallback(async (privateKey: string) => {
+    const handleConnect = useCallback(async (privateKey: string, format: 'base58' | 'byteArray') => {
         setLoading(true);
         setError('');
         try {
-            const decodedKey = bs58.decode(privateKey);
+            let decodedKey: Uint8Array;
+
+            if (format === 'base58') {
+                decodedKey = bs58.decode(privateKey);
+            } else { // 'byteArray'
+                try {
+                    const parsedArray = JSON.parse(privateKey);
+                    if (!Array.isArray(parsedArray) || !parsedArray.every(item => typeof item === 'number' && item >= 0 && item <= 255)) {
+                        throw new Error('Định dạng mảng byte không hợp lệ. Phải là một mảng các số từ 0-255.');
+                    }
+                    decodedKey = new Uint8Array(parsedArray);
+                } catch (e) {
+                    console.error('Lỗi phân tích mảng byte:', e);
+                    throw new Error('Không thể phân tích mảng byte. Hãy chắc chắn rằng đó là một mảng JSON hợp lệ, ví dụ: [1, 2, ..., 64].');
+                }
+            }
+
             if (decodedKey.length !== 64) {
-                 throw new Error('Độ dài khóa riêng tư không hợp lệ. Khóa phải là một chuỗi base58 của một mảng 64 byte.');
+                 throw new Error(`Độ dài khóa riêng tư không hợp lệ. Yêu cầu 64 byte, nhưng nhận được ${decodedKey.length}.`);
             }
             const newKeypair = Keypair.fromSecretKey(decodedKey);
             await fetchBalance(newKeypair.publicKey);

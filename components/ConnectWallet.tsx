@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
 
 interface ConnectWalletProps {
-    onConnect: (privateKey: string) => void;
+    onConnect: (privateKey: string, format: 'base58' | 'byteArray') => void;
     loading: boolean;
 }
 
@@ -17,12 +16,18 @@ const KeyIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
 
 export const ConnectWallet: React.FC<ConnectWalletProps> = ({ onConnect, loading }) => {
     const [privateKey, setPrivateKey] = useState('');
+    const [format, setFormat] = useState<'base58' | 'byteArray'>('base58');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (privateKey.trim()) {
-            onConnect(privateKey.trim());
+            onConnect(privateKey.trim(), format);
         }
+    };
+
+    const handleFormatChange = (newFormat: 'base58' | 'byteArray') => {
+        setFormat(newFormat);
+        setPrivateKey(''); // Xóa đầu vào khi thay đổi định dạng
     };
 
     return (
@@ -33,30 +38,51 @@ export const ConnectWallet: React.FC<ConnectWalletProps> = ({ onConnect, loading
             </div>
             
             <form onSubmit={handleSubmit} className="space-y-4">
+                 <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Định Dạng Khóa Riêng Tư
+                    </label>
+                    <div className="flex items-center gap-1 p-1 bg-gray-900 rounded-lg">
+                         <button type="button" onClick={() => handleFormatChange('base58')} className={`w-full py-1.5 text-sm rounded-md transition-colors ${format === 'base58' ? 'bg-purple-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`} disabled={loading}>Base58</button>
+                         <button type="button" onClick={() => handleFormatChange('byteArray')} className={`w-full py-1.5 text-sm rounded-md transition-colors ${format === 'byteArray' ? 'bg-purple-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`} disabled={loading}>Mảng Byte</button>
+                    </div>
+                </div>
+
                 <div>
                     <label htmlFor="private-key" className="block text-sm font-medium text-gray-300 mb-2">
-                        Khóa Riêng Tư (Base58)
+                        Giá Trị Khóa
                     </label>
-                    <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                           <KeyIcon className="text-gray-400" />
+                     {format === 'base58' ? (
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                               <KeyIcon className="text-gray-400" />
+                            </div>
+                            <input
+                                id="private-key"
+                                type="password"
+                                value={privateKey}
+                                onChange={(e) => setPrivateKey(e.target.value)}
+                                placeholder="Nhập khóa riêng tư base58 của bạn"
+                                className="w-full bg-gray-900 border border-gray-600 rounded-md py-2 pl-10 pr-4 text-white placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500 transition"
+                                disabled={loading}
+                            />
                         </div>
-                        <input
-                            id="private-key"
-                            type="password"
+                     ) : (
+                         <textarea
+                            id="private-key-array"
                             value={privateKey}
                             onChange={(e) => setPrivateKey(e.target.value)}
-                            placeholder="Nhập khóa riêng tư base58 của bạn"
-                            className="w-full bg-gray-900 border border-gray-600 rounded-md py-2 pl-10 pr-4 text-white placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500 transition"
+                            placeholder="Dán mảng byte của bạn, ví dụ: [191, 16, 101, ...]"
+                            className="w-full bg-gray-900 border border-gray-600 rounded-md py-2 px-3 text-white placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500 transition font-mono text-sm h-28 resize-y"
                             disabled={loading}
                         />
-                    </div>
+                     )}
                 </div>
 
                 <button
                     type="submit"
                     disabled={loading || !privateKey}
-                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:bg-gray-500 disabled:cursor-not-allowed transition-colors"
+                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-purple-500 disabled:bg-gray-500 disabled:cursor-not-allowed transition-colors"
                 >
                     {loading ? (
                         <>
