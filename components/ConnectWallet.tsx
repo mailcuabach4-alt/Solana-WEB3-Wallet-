@@ -32,11 +32,6 @@ export const ConnectWallet: React.FC<ConnectWalletProps> = ({ onConnect, loading
 
     return (
         <div className="space-y-6">
-            <div className="bg-yellow-500/20 border border-yellow-500 text-yellow-300 px-4 py-3 rounded-lg">
-                <h3 className="font-bold">Cảnh Báo Bảo Mật</h3>
-                <p className="text-sm">Việc dán khóa riêng tư của bạn vào một trang web là cực kỳ rủi ro. Chỉ sử dụng khóa từ một ví dùng một lần hoặc ví thử nghiệm cho mục đích phát triển. Đừng bao giờ sử dụng khóa của ví chính của bạn.</p>
-            </div>
-            
             <form onSubmit={handleSubmit} className="space-y-4">
                  <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">

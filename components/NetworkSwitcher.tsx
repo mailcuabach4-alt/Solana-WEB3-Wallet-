@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Cluster } from '@solana/web3.js';
 
@@ -11,22 +10,19 @@ interface NetworkSwitcherProps {
 }
 
 const networks: { value: Cluster | 'custom'; label: string }[] = [
-    { value: 'devnet', label: 'Devnet' },
-    { value: 'testnet', label: 'Testnet' },
-    { value: 'mainnet-beta', label: 'Mainnet' },
     { value: 'custom', label: 'Local / Tùy chỉnh' },
 ];
 
 export const NetworkSwitcher: React.FC<NetworkSwitcherProps> = ({ network, setNetwork, customRpcUrl, setCustomRpcUrl, disabled }) => {
     return (
         <div className="space-y-3">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div>
                 {networks.map((net) => (
                     <button
                         key={net.value}
                         onClick={() => setNetwork(net.value)}
                         disabled={disabled}
-                        className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                        className={`w-full px-3 py-2 text-sm font-medium rounded-md transition-colors ${
                             network === net.value
                                 ? 'bg-purple-600 text-white'
                                 : 'bg-gray-700 text-gray-300 hover:bg-gray-600'

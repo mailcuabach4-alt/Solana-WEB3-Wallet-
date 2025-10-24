@@ -9,7 +9,7 @@ import { Guide } from './components/Guide';
 const App: React.FC = () => {
     const [keypair, setKeypair] = useState<Keypair | null>(null);
     const [balance, setBalance] = useState<number | null>(null);
-    const [network, setNetwork] = useState<Cluster | 'custom'>('devnet');
+    const [network, setNetwork] = useState<Cluster | 'custom'>('custom');
     const [customRpcUrl, setCustomRpcUrl] = useState<string>('http://127.0.0.1:8899');
     const [error, setError] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
